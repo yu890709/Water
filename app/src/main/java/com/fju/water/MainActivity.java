@@ -1,6 +1,7 @@
 package com.fju.water;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -14,12 +15,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     private EditText next;
     private EditText month;
+    private Button calButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         month = findViewById(R.id.month);
         next = findViewById(R.id.next);
-
+        calButton = findViewById(R.id.calButton);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,9 +41,15 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        calButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cul();
+            }
+        });
     }
 
-    public void cul(View view){
+    public void cul(){
         String title="每月抄表費用";
         String message="費用:";
         int doo=0;
@@ -92,6 +101,9 @@ public class MainActivity extends AppCompatActivity {
             money=doo*level-k;
             message="費用:"+money;
         }
+
+        Intent intent=new Intent(MainActivity.this,ResultActivity.class);
+        startActivity(intent);
 
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle(title)
