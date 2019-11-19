@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         int doo=0;
         float level=0;
         float k=0;
-        float money;
+        float money=0;
         DialogInterface.OnClickListener listener=new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 month.setText("");
@@ -103,13 +103,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent=new Intent(MainActivity.this,ResultActivity.class);
+        intent.putExtra("MONEY", money);
         startActivity(intent);
 
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("OK",listener)
-                .show();
+
+//        new AlertDialog.Builder(MainActivity.this)
+//                .setTitle(title)
+//                .setMessage(message)
+//                .setPositiveButton("OK",listener)
+//                .show();
     }
 
 
