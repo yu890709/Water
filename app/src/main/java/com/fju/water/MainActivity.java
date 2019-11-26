@@ -7,7 +7,6 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -16,13 +15,15 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-
-    private EditText next;
-    private EditText month;
+    private EditText input;
     private Button calButton;
+    boolean isNext=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +31,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        month = findViewById(R.id.month);
-        next = findViewById(R.id.next);
+
+        input = findViewById(R.id.inputText);
         calButton = findViewById(R.id.calButton);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        Switch sw=findViewById(R.id.sw);
+
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isNext=isChecked;
+                TextView type=findViewById(R.id.type);
+                Switch sw=findViewById(R.id.sw);
+                sw.setText(isNext?getString(R.string.every_other_month):getString(R.string.monthly));
+                type.setText(isNext?getString(R.string.every_other_month):getString(R.string.monthly));
+
             }
         });
         calButton.setOnClickListener(new View.OnClickListener() {
@@ -50,23 +56,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void cul(){
-        String title="每月抄表費用";
-        String message="費用:";
+        String title=getString(R.string.monthly);
+        String message=getString(R.string.fee);
         int doo=0;
         float level=0;
         float k=0;
         float money=0;
         DialogInterface.OnClickListener listener=new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                month.setText("");
-                next.setText("");
+                input.setText("");
             }
         };
-        if(TextUtils.isEmpty(month.getText())&&TextUtils.isEmpty(next.getText())){
-            title="錯誤";
-            message="沒有輸入度數";
-        }else if(!TextUtils.isEmpty(month.getText())){
-            doo= Integer.parseInt(month.getText().toString());
+        if(TextUtils.isEmpty(input.getText())){
+            title=getString(R.string.error);
+            message=getString(R.string.no_input);
+        }else if(!isNext){
+            doo= Integer.parseInt(input.getText().toString());
             if(doo<=10){
                 level=7.35f;
                 k=0;
@@ -81,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
                 k=110.25f;
             }
             money=doo*level-k;
-            message="費用:"+money;
+            message=getString(R.string.fee)+money;
         }else{
-            title="隔月抄表費用";
-            doo= Integer.parseInt(next.getText().toString());
+            title=getString(R.string.every_other_month);
+            doo= Integer.parseInt(input.getText().toString());
             if(doo<=20){
                 level=7.35f;
                 k=0;
@@ -99,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
                 k=220.5f;
             }
             money=doo*level-k;
-            message="費用:"+money;
+            message=getString(R.string.fee)+money;
         }
 
         Intent intent=new Intent(MainActivity.this,ResultActivity.class);
-        intent.putExtra("MONEY", money);
+        intent.putExtra(getString(R.string.extra_money), money);
         startActivity(intent);
 
 
