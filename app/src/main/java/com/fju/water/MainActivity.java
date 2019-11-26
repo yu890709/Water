@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText input;
     private Button calButton;
     boolean isNext=false;
+    private Switch sw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,14 +35,13 @@ public class MainActivity extends AppCompatActivity {
 
         input = findViewById(R.id.inputText);
         calButton = findViewById(R.id.calButton);
-        Switch sw=findViewById(R.id.sw);
+        sw = findViewById(R.id.sw);
 
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isNext=isChecked;
                 TextView type=findViewById(R.id.type);
-                Switch sw=findViewById(R.id.sw);
                 sw.setText(isNext?getString(R.string.every_other_month):getString(R.string.monthly));
                 type.setText(isNext?getString(R.string.every_other_month):getString(R.string.monthly));
 
